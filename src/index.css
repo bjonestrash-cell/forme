@@ -1,0 +1,136 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cream: #F8F5F0;
+  --color-ink: #1A1A1A;
+  --color-blush: #D4A5A5;
+  --color-greige: #E8E0D8;
+  --color-muted: #4A4540;
+  --color-muted-light: #6B6560;
+  --color-brown: #3D2B1F;
+  --color-brown-mid: #6B4C3B;
+  --color-brown-light: #C4A99A;
+
+  --font-sans: "DM Sans", sans-serif;
+  --font-serif: "Playfair Display", serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: auto;
+    overflow-x: hidden;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-weight: 300;
+    color: var(--color-ink);
+    background-color: var(--color-cream);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    cursor: none;
+    overflow-x: hidden;
+  }
+
+  * {
+    cursor: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  *:focus {
+    outline: none;
+  }
+
+  a, button { cursor: none; }
+  button:focus, div:focus { outline: none; box-shadow: none; }
+  input:focus, textarea:focus, select:focus { outline: none; }
+
+  ::selection {
+    background-color: var(--color-blush);
+    color: var(--color-ink);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 300;
+  }
+
+  /* Touch device cursor reset */
+  @media (pointer: coarse) {
+    body, *, a, button, input, textarea, select {
+      cursor: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .accent-heading {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  .page-container {
+    max-width: 1280px;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .page-container {
+      padding-inline: 2rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .page-container {
+      padding-inline: 5rem;
+    }
+  }
+
+  .section-padding {
+    padding-block: 3.75rem;
+  }
+
+  @media (min-width: 768px) {
+    .section-padding {
+      padding-block: 7rem;
+    }
+  }
+
+  /* Service pill tags */
+  .service-pill {
+    display: inline-block;
+    font-family: var(--font-sans);
+    font-weight: 300;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid var(--color-blush);
+    padding: 6px 14px;
+    color: var(--color-muted);
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .service-pill:hover {
+    background-color: var(--color-brown);
+    color: white;
+  }
+}
+
+@layer utilities {
+  .font-200 {
+    font-weight: 200;
+  }
+  .font-300 {
+    font-weight: 300;
+  }
+}
+
+@keyframes scroll-line {
+  0%, 100% { transform: translateY(0); opacity: 0.4; }
+  50% { transform: translateY(8px); opacity: 1; }
+}
+
+.scroll-indicator-line {
+  animation: scroll-line 2s ease-in-out infinite;
+}
