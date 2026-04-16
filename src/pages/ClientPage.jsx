@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import FadeInSection from '../components/FadeInSection'
 import CTAButton from '../components/CTAButton'
@@ -11,6 +11,7 @@ const placeholderColors = ['#2C2825', '#D4A5A5', '#3D3530', '#C4B5A8', '#2C2825'
 
 export default function ClientPage() {
   const { slug } = useParams()
+  const navigate = useNavigate()
   const clientIndex = clientsData.findIndex((c) => c.slug === slug)
   const client = clientsData[clientIndex]
 
@@ -54,12 +55,34 @@ export default function ClientPage() {
               &larr; work
             </Link>
 
-            <span
-              className="inline-block text-[11px] tracking-[0.1em] uppercase font-200 px-3 py-1.5 mb-4 md:mb-6 ml-4"
+            <button
+              onClick={() => {
+                navigate('/')
+                setTimeout(() => {
+                  const el = document.getElementById('clients')
+                  if (el) el.scrollIntoView({ behavior: 'smooth' })
+                }, 400)
+              }}
+              className="text-[11px] tracking-[0.1em] uppercase font-200 px-3 py-1.5 mb-6 md:mb-8 ml-4 border-none"
               style={{ backgroundColor: '#D4A5A5', color: 'white' }}
             >
-              {client.category}
-            </span>
+              client work
+            </button>
+
+            {client.logo && (
+              <div className="mb-6 md:mb-8">
+                <img
+                  src={client.logo}
+                  alt={client.name}
+                  className="client-logo-hover"
+                  style={{
+                    width: `${client.clientPageLogoWidth || 100}px`,
+                    height: 'auto',
+                    filter: 'brightness(0) saturate(100%) invert(72%) sepia(10%) saturate(788%) hue-rotate(326deg) brightness(91%) contrast(87%)',
+                  }}
+                />
+              </div>
+            )}
 
             <h1
               className="accent-heading tracking-tight leading-tight"

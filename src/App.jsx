@@ -4,6 +4,7 @@ import { AnimatePresence } from 'framer-motion'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import CustomCursor from './components/CustomCursor'
+import IntroOverlay from './components/IntroOverlay'
 import Home from './pages/Home'
 import Work from './pages/Work'
 import Services from './pages/Services'
@@ -24,6 +25,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <IntroOverlay />
       <CustomCursor />
       <ScrollToTop />
       <Navbar />

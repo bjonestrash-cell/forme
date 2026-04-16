@@ -126,6 +126,24 @@
   }
 }
 
+/* Client page logo hover — cycles through on-brand colors */
+.client-logo-hover {
+  transition: filter 0.4s ease;
+  pointer-events: auto;
+}
+
+.client-logo-hover:hover {
+  animation: logo-color-cycle 3s ease infinite;
+}
+
+@keyframes logo-color-cycle {
+  0%   { filter: brightness(0) saturate(100%) invert(72%) sepia(10%) saturate(788%) hue-rotate(326deg) brightness(91%) contrast(87%); }
+  25%  { filter: brightness(0) saturate(100%) invert(18%) sepia(15%) saturate(746%) hue-rotate(346deg) brightness(95%) contrast(92%); }
+  50%  { filter: brightness(0) saturate(100%) invert(78%) sepia(5%) saturate(500%) hue-rotate(340deg) brightness(90%) contrast(90%); }
+  75%  { filter: brightness(0) saturate(100%) invert(30%) sepia(20%) saturate(600%) hue-rotate(340deg) brightness(80%) contrast(90%); }
+  100% { filter: brightness(0) saturate(100%) invert(72%) sepia(10%) saturate(788%) hue-rotate(326deg) brightness(91%) contrast(87%); }
+}
+
 @keyframes scroll-line {
   0%, 100% { transform: translateY(0); opacity: 0.4; }
   50% { transform: translateY(8px); opacity: 1; }

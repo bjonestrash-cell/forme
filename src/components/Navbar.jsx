@@ -231,13 +231,13 @@ export default function Navbar() {
           >
             <div
               style={{
-                maxWidth: '900px',
+                maxWidth: '880px',
                 margin: '0 auto',
                 display: 'grid',
                 gridTemplateColumns: 'repeat(4, 1fr)',
                 alignItems: 'start',
-                gap: '40px',
-                padding: '40px 60px',
+                gap: '0',
+                padding: '44px 60px',
               }}
             >
               {megaColumns.map((col) => (
@@ -246,10 +246,8 @@ export default function Navbar() {
                   style={{
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '12px',
                     minWidth: 0,
-                    paddingTop: 0,
-                    marginTop: 0,
+                    padding: '0 20px 0 0',
                   }}
                 >
                   <div
@@ -257,20 +255,20 @@ export default function Navbar() {
                     tabIndex={-1}
                     onClick={() => handleMegaItemClick(col.anchor)}
                     className="group text-left"
-                    style={{ alignSelf: 'flex-start' }}
+                    style={{ marginBottom: '16px' }}
                   >
-                    <p className="accent-heading text-base text-ink group-hover:text-blush transition-colors duration-200" style={{ margin: 0 }}>
+                    <p className="accent-heading text-[15px] text-ink group-hover:text-blush transition-colors duration-200" style={{ margin: 0 }}>
                       {col.name}
                     </p>
                   </div>
-                  <div className="flex flex-col gap-1.5">
+                  <div className="flex flex-col" style={{ gap: '10px' }}>
                     {col.services.map((s) => (
                       <div
                         key={s}
                         role="button"
                         tabIndex={-1}
                         onClick={() => handleMegaItemClick(col.anchor)}
-                        className="text-left text-[11px] tracking-[0.12em] uppercase font-200 text-muted hover:text-ink transition-colors duration-200 whitespace-nowrap"
+                        className="text-left text-[11px] tracking-[0.12em] uppercase font-200 text-muted hover:text-ink transition-colors duration-200"
                       >
                         {s}
                       </div>

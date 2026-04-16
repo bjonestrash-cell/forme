@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Forme — Creative Studio</title>
+  <meta name="description" content="Forme is a full-service creative agency. Coming soon." />
+  <meta name="theme-color" content="#0A0A0A" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23F8F5F0'/><text x='50%25' y='58%25' dominant-baseline='middle' text-anchor='middle' font-family='serif' font-style='italic' font-size='22' fill='%231A1A1A'>F</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@200;300&family=Playfair+Display:ital,wght@1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      font-family: 'DM Sans', sans-serif;
+      background: #0A0A0A;
+      color: #F8F5F0;
+      height: 100%;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+      cursor: default;
+    }
+
+    canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Grain */
+    .grain {
+      position: fixed;
+      inset: -50%;
+      width: 200%;
+      height: 200%;
+      z-index: 90;
+      pointer-events: none;
+      opacity: 0.045;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      animation: grain 0.5s steps(8) infinite;
+    }
+
+    @keyframes grain {
+      0%, 100% { transform: translate(0, 0); }
+      25%  { transform: translate(-2%, 1%); }
+      50%  { transform: translate(1%, -2%); }
+      75%  { transform: translate(-1%, 2%); }
+    }
+
+    /* UI layer */
+    .ui {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      pointer-events: none;
+    }
+
+    .center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(24px, 4vw, 40px);
+      letter-spacing: 0.02em;
+      color: #F8F5F0;
+      line-height: 1;
+      opacity: 0;
+    }
+
+    .divider {
+      width: 0;
+      height: 1px;
+      background: rgba(212, 165, 165, 0.25);
+      opacity: 0;
+    }
+
+    .status {
+      font-weight: 200;
+      font-size: 9px;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: rgba(248, 245, 240, 0.2);
+      opacity: 0;
+    }
+
+    .bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(24px, 5vw, 60px) clamp(24px, 3vh, 40px);
+      pointer-events: auto;
+    }
+
+    .bottom span, .bottom a {
+      font-weight: 200;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(248, 245, 240, 0.12);
+      text-decoration: none;
+      transition: color 0.5s ease;
+      opacity: 0;
+    }
+
+    .bottom a:hover { color: rgba(212, 165, 165, 0.5); }
+
+    @media (max-width: 500px) {
+      .bottom {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .grain { opacity: 0.035; }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="c"></canvas>
+  <div class="grain"></div>
+
+  <div class="ui">
+    <div class="center">
+      <h1 class="logo" id="logo">forme</h1>
+      <div class="divider" id="divider"></div>
+      <p class="status" id="status">coming soon</p>
+    </div>
+    <div class="bottom">
+      <span id="year">2026</span>
+      <a id="email" href="mailto:hello@theformeagency.com">hello@theformeagency.com</a>
+    </div>
+  </div>
+
+  <script>
+    // ── CANVAS: floating "forme" words with depth ──
+    const canvas = document.getElementById('c');
+    const ctx = canvas.getContext('2d');
+    let W, H, mouse = { x: 0, y: 0 }, particles = [];
+
+    function resize() {
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    // Track mouse for parallax
+    document.addEventListener('mousemove', e => {
+      mouse.x = (e.clientX / W - 0.5) * 2;
+      mouse.y = (e.clientY / H - 0.5) * 2;
+    });
+
+    class Particle {
+      constructor() { this.reset(true); }
+
+      reset(init) {
+        this.x = Math.random() * W;
+        this.y = init ? Math.random() * H : H + 100;
+        this.z = Math.random(); // 0=far, 1=near
+        this.speed = 0.15 + this.z * 0.35;
+        this.size = 14 + this.z * (window.innerWidth < 768 ? 28 : 55);
+        this.opacity = 0.008 + this.z * 0.022;
+        this.drift = (Math.random() - 0.5) * 0.3;
+        this.phase = Math.random() * Math.PI * 2;
+      }
+
+      update(t) {
+        this.y -= this.speed;
+        this.x += this.drift + Math.sin(t * 0.0003 + this.phase) * 0.15;
+
+        // Mouse parallax — deeper particles move less
+        const parallax = this.z * 12;
+        this.renderX = this.x + mouse.x * parallax;
+        this.renderY = this.y + mouse.y * parallax * 0.5;
+
+        if (this.y < -80) this.reset(false);
+      }
+
+      draw() {
+        ctx.globalAlpha = this.opacity;
+        ctx.font = `italic 400 ${this.size}px 'Playfair Display', serif`;
+        ctx.fillStyle = '#F8F5F0';
+        ctx.fillText('forme', this.renderX, this.renderY);
+      }
+    }
+
+    const count = window.innerWidth < 768 ? 10 : 18;
+    for (let i = 0; i < count; i++) particles.push(new Particle());
+
+    function animate(t) {
+      ctx.clearRect(0, 0, W, H);
+      particles.forEach(p => { p.update(t); p.draw(); });
+      requestAnimationFrame(animate);
+    }
+    requestAnimationFrame(animate);
+
+    // ── INTRO SEQUENCE ──
+    // Everything is timed precisely — no CSS animation clutter
+
+    const logo = document.getElementById('logo');
+    const divider = document.getElementById('divider');
+    const status = document.getElementById('status');
+    const year = document.getElementById('year');
+    const email = document.getElementById('email');
+
+    function anim(el, props, duration, delay) {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          Object.assign(el.style, {
+            transition: `all ${duration}ms cubic-bezier(0.16, 1, 0.3, 1)`,
+            ...props
+          });
+          setTimeout(resolve, duration);
+        }, delay);
+      });
+    }
+
+    async function intro() {
+      // 1. Logo fades in
+      await anim(logo, { opacity: '1', transform: 'translateY(0)' }, 1000, 600);
+
+      // 2. Divider draws
+      divider.style.opacity = '1';
+      await anim(divider, { width: '32px' }, 600, 200);
+
+      // 3. Status appears
+      await anim(status, { opacity: '1' }, 500, 200);
+
+      // 4. Bottom details
+      anim(year, { opacity: '1' }, 400, 300);
+      anim(email, { opacity: '1' }, 400, 500);
+    }
+
+    // Set initial states
+    logo.style.transform = 'translateY(8px)';
+    logo.style.opacity = '0';
+
+    intro();
+  </script>
+
+</body>
+</html>

@@ -16,6 +16,7 @@ const buckets = [
     tagline: 'We make content that stops the scroll.',
     services: ['Content Creation', 'Short-Form Video', 'TikTok & Reels', 'Stories', 'Event Content'],
     color: '#2C2825',
+    image: '/images/home/content-studio.jpg',
     layout: 'left',
   },
   {
@@ -26,6 +27,7 @@ const buckets = [
     tagline: 'Your brand, always on — always on-brand.',
     services: ['Social Media Management', 'Feed Curation', 'Scheduling', 'Community'],
     color: '#D4A5A5',
+    image: '/images/home/social-management.jpg',
     layout: 'right',
   },
   {
@@ -36,6 +38,7 @@ const buckets = [
     tagline: 'The visual language your brand deserves.',
     services: ['Branding', 'Web Design', 'Marketing Strategy'],
     color: '#3D3530',
+    image: '/images/home/brand-website-development.png',
     layout: 'left',
   },
   {
@@ -46,11 +49,12 @@ const buckets = [
     tagline: 'The future of content infrastructure.',
     services: ['AI Content Creation', 'Claude Code Development', 'Workflow Automation'],
     color: '#C4B5A8',
+    image: '/images/home/ai-technology.jpg',
     layout: 'right',
   },
 ]
 
-function ServiceSection({ id, number, name, tagline, services, color, layout }) {
+function ServiceSection({ id, number, name, tagline, services, color, image, layout }) {
   const isLeft = layout === 'left'
 
   return (
@@ -88,13 +92,17 @@ function ServiceSection({ id, number, name, tagline, services, color, layout }) 
           className={`order-last md:order-none ${!isLeft ? 'md:col-start-1 md:row-start-1' : ''}`}
         >
           <div
-            className="w-full aspect-[4/3] md:aspect-auto md:h-[500px]"
+            className="w-full aspect-[4/3] md:aspect-auto md:h-[500px] relative overflow-hidden"
             style={{
               backgroundColor: color,
               marginLeft: isLeft ? 'auto' : '0',
               marginRight: !isLeft ? 'auto' : '0',
             }}
-          />
+          >
+            {image && (
+              <img src={image} alt={name} className="absolute inset-0 w-full h-full object-cover" />
+            )}
+          </div>
         </motion.div>
       </div>
     </section>

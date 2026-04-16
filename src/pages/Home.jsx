@@ -13,13 +13,13 @@ const stagger = (delay) => ({
 })
 
 const gridCards = [
-  { number: '01', name: 'Content Studio', color: '#2C2825', anchor: 'content-studio' },
-  { number: '02', name: 'Social Management', color: '#D4A5A5', anchor: 'social-management' },
-  { number: '03', name: 'Brand & Website Development', color: '#3D3530', anchor: 'brand-website-development' },
-  { number: '04', name: 'AI & Technology', color: '#C4B5A8', anchor: 'ai-technology' },
+  { number: '01', name: 'Content Studio', color: '#2C2825', anchor: 'content-studio', image: '/images/home/content-studio.jpg' },
+  { number: '02', name: 'Social Management', color: '#D4A5A5', anchor: 'social-management', image: '/images/home/social-management.jpg' },
+  { number: '03', name: 'Brand & Website Development', color: '#3D3530', anchor: 'brand-website-development', image: '/images/home/brand-website-development.png' },
+  { number: '04', name: 'AI & Technology', color: '#C4B5A8', anchor: 'ai-technology', image: '/images/home/ai-technology.jpg' },
 ]
 
-const featuredTestimonial = clientsData[0]
+const featuredTestimonial = clientsData[1]
 
 export default function Home() {
   return (
@@ -32,7 +32,7 @@ export default function Home() {
             className="accent-heading leading-none tracking-[-0.02em]"
             style={{ fontSize: 'clamp(48px, 12vw, 180px)' }}
           >
-            FORME
+            forme
           </motion.h1>
           <motion.p {...stagger(0.4)} className="mt-6 md:mt-8 text-[15px] font-200 text-muted max-w-[420px] mx-auto leading-[1.9]">
             Creative infrastructure for brands that take aesthetics seriously.
@@ -69,14 +69,18 @@ export default function Home() {
                 style={{ aspectRatio: '1/1' }}
               >
                 <div
-                  className="absolute inset-0"
+                  className="absolute inset-0 group-hover:scale-[1.02]"
                   style={{
                     backgroundColor: card.color,
-                    transition: 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                    transition: 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                   }}
-                />
-                <div className="absolute inset-0 group-hover:scale-[1.02]" style={{ transition: 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)' }}>
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+                >
+                  <img
+                    src={card.image}
+                    alt={card.name}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors duration-300" />
                 </div>
                 <span className="absolute top-5 left-5 text-[11px] font-200 tracking-[0.3em] text-white/85">
                   {card.number}
@@ -90,15 +94,15 @@ export default function Home() {
             </motion.div>
           ))}
         </div>
-        <div className="page-container">
+        <div className="page-container mt-16">
           {gridCards.map((b) => (
             <Link
               key={b.anchor}
               to={`/services#${b.anchor}`}
-              className="group flex items-center border-t border-ink/[0.08] py-5 no-underline"
+              className="group flex items-center border-t border-ink/[0.08] py-6 no-underline"
             >
               <div className="w-0 group-hover:w-4 h-px bg-blush transition-all duration-200 mr-0 group-hover:mr-4" />
-              <span className="text-[11px] tracking-[0.2em] uppercase font-200 text-muted group-hover:text-ink transition-colors duration-200">
+              <span className="text-[13px] tracking-[0.2em] uppercase font-200 text-muted group-hover:text-ink transition-colors duration-200">
                 {b.name}
               </span>
             </Link>
@@ -112,37 +116,39 @@ export default function Home() {
       </div>
 
       {/* ─── CLIENT LOGO STRIP ─── */}
-      <section className="border-b border-greige py-10">
+      <section id="clients" className="border-b border-greige py-10 scroll-mt-24">
         <FadeInSection>
           <p className="text-center text-[11px] tracking-[0.3em] font-200 uppercase mb-8" style={{ color: '#6B4C3B' }}>
             brands we've worked with
           </p>
-          {/* Mobile: 2-col grid. Desktop: inline with vertical rules */}
-          <div className="hidden sm:flex flex-wrap items-center justify-center gap-0">
+          <div className="flex items-center justify-center">
             {clientsData.map((client, i) => (
               <span key={client.slug} className="flex items-center">
-                {i > 0 && <span className="w-px h-4 bg-greige mx-6" />}
+                {i > 0 && <span className="w-px h-6 lg:h-8 bg-greige mx-6 sm:mx-10 lg:mx-14" />}
                 <Link
                   to={`/clients/${client.slug}`}
-                  className="text-[13px] tracking-[0.2em] uppercase font-light no-underline hover:underline hover:underline-offset-4 hover:decoration-blush transition-all duration-200"
-                  style={{ color: '#4A4540' }}
+                  className="group flex items-center justify-center no-underline transition-all duration-200"
+                  style={{ width: 'clamp(80px, 14vw, 180px)' }}
                 >
-                  {/* LOGO SWAP: replace <span> with <img grayscale → color on hover> here */}
-                  {client.name}
+                  {client.logo ? (
+                    <img
+                      src={client.logo}
+                      alt={client.name}
+                      className="w-full max-h-10 sm:max-h-12 lg:max-h-14 object-contain opacity-60 group-hover:opacity-100 transition-opacity duration-200"
+                      style={{ filter: 'grayscale(100%)' }}
+                      onMouseEnter={(e) => { e.currentTarget.style.filter = 'grayscale(0%)' }}
+                      onMouseLeave={(e) => { e.currentTarget.style.filter = 'grayscale(100%)' }}
+                    />
+                  ) : (
+                    <span
+                      className="text-[13px] tracking-[0.2em] uppercase font-light hover:underline hover:underline-offset-4 hover:decoration-blush"
+                      style={{ color: '#4A4540' }}
+                    >
+                      {client.name}
+                    </span>
+                  )}
                 </Link>
               </span>
-            ))}
-          </div>
-          <div className="sm:hidden grid grid-cols-2 gap-0">
-            {clientsData.map((client) => (
-              <Link
-                key={client.slug}
-                to={`/clients/${client.slug}`}
-                className="flex items-center justify-center text-[12px] tracking-[0.15em] uppercase font-light no-underline border-b border-greige/50 transition-colors duration-200"
-                style={{ color: '#4A4540', padding: '12px 16px' }}
-              >
-                {client.name}
-              </Link>
             ))}
           </div>
         </FadeInSection>
